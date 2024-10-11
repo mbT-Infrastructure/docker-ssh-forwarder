@@ -1,0 +1,13 @@
+services:
+
+    ssh-forwarder:
+        container_name: ssh-forwarder
+        build: .
+        environment:
+            - SERVER_URL=ssh://
+            - |
+                SERVER_KEY=
+            - SERVER_IDENTITY=
+            - FORWARD_DIRECTION=local
+            - SOURCE_ADDRESS=127.0.0.1:8000
+            - TARGET_ADDRESS=google.com:80
