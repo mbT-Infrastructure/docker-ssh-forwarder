@@ -3,11 +3,40 @@ services:
     ssh-forwarder:
         container_name: ssh-forwarder
         build: .
+        depends_on:
+            ssh-forwarder-server:
+                condition: service_healthy
+        mem_limit: 20M
         environment:
-            - SERVER_URL=ssh://
+            - SERVER_URL=ssh://user@ssh-forwarder-server
             - |
                 SERVER_KEY=
             - SERVER_IDENTITY=
             - FORWARD_DIRECTION=local
-            - SOURCE_ADDRESS=127.0.0.1:8000
-            - TARGET_ADDRESS=google.com:80
+            - SOURCE_ADDRESS=*:8000
+            - TARGET_ADDRESS=website:80
+            - FORWARD_DIRECTION_B=remote
+            - SOURCE_ADDRESS_B=*:8001
+            - TARGET_ADDRESS_B=website:80
+        read_only: true
+        ports:
+            - 127.0.0.1:8001:8001
+
+    ssh-forwarder-server:
+        image: docker.io/madebytimo/ssh-forwarder-server
+        mem_limit: 20M
+        environment:
+            - AUTHORIZED_PUBLIC_KEYS=ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPD2LbDssoahgfmVluUcmkI4kMbHsxmGU9r4O7B43NTT
+            - PERMIT_LISTEN=*:8000
+            - PERMIT_OPEN=website:80
+        read_only: true
+        tmpfs:
+            - /media/ssh:size=16M
+        ports:
+            - 127.0.0.1:8000:8000
+
+    website:
+        image: docker.io/library/caddy
+        mem_limit: 20M
+        command: caddy respond --listen :80 'Hello!'
+        read_only: true

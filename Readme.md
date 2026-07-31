@@ -12,19 +12,25 @@ This Container image extends the [base image].
 
 ### Environment variables
 
--   `SERVER_KEY`
-    -   SSH key to use for authorization to the server.
--   `SERVER_URL`
-    -   Server to connect to in the format ` ssh://[user@]hostname[:port]`.
--   `SERVER_IDENTITY`
-    -   Public key of the server for host key checking.
--   `FORWARD_DIRECTION`
-    -   Where to forward. `remote` to forward connections to a port on the local machine to a remote
-        port. `local` to forward connections to a port on the remote machine to a local port.
--   `SOURCE_ADDRESS`
-    -   Source address in the format `HOST:PORT`.
--   `TARGET_ADDRESS`
-    -   Target address in the format `HOST:PORT`.
+- `SERVER_KEY`
+    - SSH key to use for authorization to the server.
+- `SERVER_URL`
+    - Server to connect to in the format ` ssh://[user@]hostname[:port]`.
+- `SERVER_IDENTITY`
+    - Public key of the server for host key checking.
+- `FORWARD_DIRECTION`, `FORWARD_DIRECTION_*`
+    - Where to forward. `remote` to forward connections to a port on the local machine to a remote
+      port. `local` to forward connections to a port on the remote machine to a local port.
+    - Multiple can be defined by using a suffix (`_*`). The suffix has to be consistent with the one
+      used for `SOURCE_ADDRESS` and `TARGET_ADDRESS`.
+- `SOURCE_ADDRESS`, `SOURCE_ADDRESS_*`
+    - Source address in the format `HOST:PORT`.
+    - Multiple can be defined by using a suffix (`_*`). The suffix has to be consistent with the one
+      used for `FORWARD_DIRECTION` and `TARGET_ADDRESS`.
+- `TARGET_ADDRESS`, `TARGET_ADDRESS_*`
+    - Target address in the format `HOST:PORT`.
+    - Multiple can be defined by using a suffix (`_*`). The suffix has to be consistent with the one
+      used for `FORWARD_DIRECTION` and `SOURCE_ADDRESS`.
 
 ## Development
 
